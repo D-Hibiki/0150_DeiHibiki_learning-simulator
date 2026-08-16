@@ -46,7 +46,7 @@
 - 方法論のSSOT: `docs/METHODOLOGY.md`
 - 運用のSSOT: `OPERATIONS.md`
 - ホスティング紐付けのSSOT: `.openai/hosting.json`（project ID未設定）
-- 現在の外部状態: GitHub repository、remote、PR、Sites project/version/deploymentはいずれも未作成
+- 現在の外部状態: `D-Hibiki/learning-infrastructure-redundancy-simulator` はprivateで作成済み。local remote、push、PR、Sites project/version/deploymentは未作成
 
 ## 人間目視
 
@@ -59,7 +59,7 @@
 - review済み: Codexによるローカルデザイン比較とブラウザーsmoke
 - 未review: 人間によるUI、ネイティブ保存、印刷、Sites実URL、アクセス制御、ヘッダー
 - 残余リスク: 合成モデルの誤読、外的妥当性不足、ブラウザー差、公開設定ミス、未知の依存脆弱性
-- 次に承認する正確な操作: `D-Hibiki/learning-infrastructure-redundancy-simulator` をprivate GitHub repositoryとして作成する（pushは含まない）
+- 次に承認する正確な操作: 上記private repositoryを`origin`として追加する。その後、別承認でlocal `main`をpushする
 
 ## 判定理由
 
