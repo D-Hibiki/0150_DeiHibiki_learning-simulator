@@ -6,7 +6,7 @@
 - この記録を追加するcommit: 検査対象HEADの後続commit
 - 確認日時: `2026-08-16T10:46:44.2901029+09:00`
 - 判定: `blocked`
-- 現在の段階: `local_checks_passed`
+- 現在の段階: `private_remote_synced`
 
 ## 確認済み
 
@@ -22,7 +22,7 @@
 - [x] local browser smoke: desktop and mobile core flow
 - [x] Product Design comparison QA: `design-qa.md` says `final result: passed`
 - [x] standard static security review: 0 reportable code findings
-- [ ] remote GitHub CI
+- [x] remote GitHub CI: `CI` run `31920743342` passed for `7faec890d2bdd34e64956b1b74ea3b96ac2c0fc1`
 - [ ] GitHub repository settings and security features
 - [ ] private Sites deployment and production smoke
 - [ ] native JSON/CSV save dialog on the reviewer's browser
@@ -37,7 +37,7 @@
 | `npm audit --audit-level=high` | pass | 0 vulnerabilities |
 | design QA | pass | `docs/design/reference.png` とブラウザー実装を同一比較入力で確認 |
 | security review | pass with limitation | 登録snapshot後のlockfile修正は別途npm auditと全検証で確認 |
-| GitHub CI | unknown | remote未作成 |
+| GitHub CI | pass | [run 31920743342](https://github.com/D-Hibiki/learning-infrastructure-redundancy-simulator/actions/runs/31920743342) |
 | Sites production | unknown | 未デプロイ |
 
 ## SSOTと外部状態
@@ -46,7 +46,7 @@
 - 方法論のSSOT: `docs/METHODOLOGY.md`
 - 運用のSSOT: `OPERATIONS.md`
 - ホスティング紐付けのSSOT: `.openai/hosting.json`（project ID未設定）
-- 現在の外部状態: `D-Hibiki/learning-infrastructure-redundancy-simulator` はprivateで作成済み。local remote、push、PR、Sites project/version/deploymentは未作成
+- 現在の外部状態: `D-Hibiki/learning-infrastructure-redundancy-simulator` はprivateで作成済み。`origin/main`は`7faec890d2bdd34e64956b1b74ea3b96ac2c0fc1`と一致。PR、Sites project/version/deploymentは未作成
 
 ## 人間目視
 
@@ -59,7 +59,7 @@
 - review済み: Codexによるローカルデザイン比較とブラウザーsmoke
 - 未review: 人間によるUI、ネイティブ保存、印刷、Sites実URL、アクセス制御、ヘッダー
 - 残余リスク: 合成モデルの誤読、外的妥当性不足、ブラウザー差、公開設定ミス、未知の依存脆弱性
-- 次に承認する正確な操作: 上記private repositoryを`origin`として追加する。その後、別承認でlocal `main`をpushする
+- 次に承認する正確な操作: `chore/launch-readiness`をprivate remoteへpushし、その後別承認でDraft PRを作成する
 
 ## 判定理由
 
