@@ -4,6 +4,13 @@
 
 > このアプリは、設定した数式と合成した仮想学習者に条件づけた計算実験です。人間から回答を収集した社会調査ではなく、現実の教育効果、因果効果、将来値、母集団代表性を示しません。
 
+## 提出物
+
+- [GitHubリポジトリ](https://github.com/D-Hibiki/learning-infrastructure-redundancy-simulator)
+- [実行結果まとめ](RESULTS.md)
+- [プレゼン資料](docs/submission/learning-infrastructure-redundancy-simulator.pptx)
+- [非公開Sites版](https://learning-infra-redundancy-sim.dayuulsr011f.chatgpt.site/) — 実行できるのはModel v1のみ。Agent Worldは説明用disabled UIで、実験はローカル専用です。
+
 ## 2つのモデル系統
 
 - **Model v1**: 現在実装済みのブラウザー内Monte Carloシミュレーターです。このREADMEの「できること」と実行commandはModel v1を指します。
@@ -34,7 +41,16 @@ Agent WorldはローカルorchestratorからloopbackのOllamaだけを利用し�
 
 アプリのコードは設定や結果を外部へ送信しません。公開後のホスティング基盤では、通常の静的アセット要求に伴うアクセス情報が基盤側で扱われる可能性があるため、公開時にSites側の仕様と設定を別途確認します。
 
-Agent World v1は人名や人口属性personaを使わず、合成した行動関連のtyped stateとローカルartifactだけを扱います。実在個人・未成年者・学校や組織の機微情報は入力しません。Ollama modelのpullは外部通信とローカルcache変更、実験はGPU時間とdisk消費、artifactのGit/Issue/PR/Sites掲載は外部共有として、それぞれ実行前に対象と影響を確認します。
+Agent World v0.1は人名や人口属性personaを使わず、合成した行動関連のtyped stateとローカルartifactだけを扱います。実在個人・未成年者・学校や組織の機微情報は入力しません。Ollama modelのpullは外部通信とローカルcache変更、実験はGPU時間とdisk消費、artifactのGit/Issue/PR/Sites掲載は外部共有として、それぞれ実行前に対象と影響を確認します。
+
+## 実行環境
+
+| 対象 | 必要環境 | 検証済み構成 |
+|---|---|---|
+| Model v1 | Node.js/npm、モダンブラウザー | Windows 11、React 19、Vite 6 |
+| Agent World | 上記＋Ollama、ローカルGPU推論環境 | RAM 32 GB、GeForce RTX 5060 Ti 16 GB、Ollama 0.32.14、`qwen3.5:9b-q4_K_M` |
+
+検証済み構成は動作実績であり、最小要件の保証ではありません。公開Sitesで実行できるのはブラウザー内のModel v1だけで、利用者PCのOllamaへ接続しません。
 
 ## クイックスタート
 
@@ -100,11 +116,13 @@ npm run build
 - `dist/server/index.js`
 - `dist/.openai/hosting.json`
 
-Sitesへのデプロイは保留中です。初回共有はprivateを既定とし、保存したSite versionを明示的にデプロイします。問題時のロールバックは、直前の既知正常な保存済みSites versionを再デプロイして行います。詳しくは [OPERATIONS.md](OPERATIONS.md) を参照してください。
+Sitesはprivate-by-defaultで運用し、保存したSite versionを明示的にデプロイします。問題時のロールバックは、直前の既知正常な保存済みSites versionを再デプロイして行います。詳しくは [OPERATIONS.md](OPERATIONS.md) を参照してください。
 
 ## 設計資料
 
 - [方法論](docs/METHODOLOGY.md)
+- [実行結果まとめ](RESULTS.md)
+- [プレゼン資料](docs/submission/learning-infrastructure-redundancy-simulator.pptx)
 - [アーキテクチャ](docs/architecture.md)
 - [脅威モデル](docs/threat-model.md)
 - [Agent World ODD仕様](docs/agent-world-odd.md)
@@ -123,5 +141,5 @@ Sitesへのデプロイは保留中です。初回共有はprivateを既定と�
 - 実装形態: React + TypeScript + Vite、Web Workerによる計算
 - Agent World: v0.1 core/metrics＋local runner。実Ollamaでcompatibility/citizen/browser smoke済み、confirmatoryは未承認、Sitesでは無効
 - 保存: ブラウザー内メモリと利用者が明示的に保存するローカルファイルのみ
-- Sitesデプロイ: 保留中、private-by-default
+- Sitesデプロイ: private-by-default。Model v1のみ実行可能で、Agent Worldは説明用disabled UI
 - 公開判断: 自動検証に加えて人間による承認が必要

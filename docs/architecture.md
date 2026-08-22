@@ -112,7 +112,7 @@ UIが提供する主な操作は次です。
 - `dist/server/index.js`
 - `dist/.openai/hosting.json`
 
-`worker/index.js`はSitesの静的アセットを配信します。不明なHTML向けGET/HEADだけを`index.html`へフォールバックし、API形式の要求や書き込み要求は404のまま返します。現在の`.openai/hosting.json`にはD1/R2 bindingがなく、デプロイは保留中です。初回デプロイはprivate-by-defaultです。
+`worker/index.js`はSitesの静的アセットを配信します。不明なHTML向けGET/HEADだけを`index.html`へフォールバックし、API形式の要求や書き込み要求は404のまま返します。現在の`.openai/hosting.json`には既存Sites project IDがあり、D1/R2 bindingはありません。デプロイはprivate-by-defaultです。
 
 ## 外部状態への影響
 

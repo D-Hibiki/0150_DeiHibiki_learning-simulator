@@ -2,11 +2,11 @@
 
 ## 現在の運用状態
 
-- environment: ローカル開発・検証済み。Sitesデプロイは保留中
+- environment: ローカル開発・検証済み。既存の非公開Sites projectへModel v1をデプロイ
 - deployment visibility: 初回はprivate-by-default。public化は別承認
 - data: 合成データのみ。認証、データベース、API、分析、永続化なし
 - primary verification: `npm run verify`
-- owner / incident contact: GitHubリポジトリ作成時に所有者と非公開連絡先を確定する
+- owner / incident contact: GitHub repository owner。非公開連絡先はGitHub/Sites管理画面で管理し、リポジトリへ記録しない
 - known limitations: 合成モデルであり、実測の社会調査、因果推論、母集団推定、将来予測ではない
 - agent world: v0.1 core/metricsとlocal runnerを分離。loopback/failure/ODD判定blockerは解消しローカルsmoke済み、confirmatoryは未承認、Sitesでは常に無効
 
@@ -21,7 +21,7 @@
 | Sites private | 実URLでの共有レビュー | Sites version保存とprivate deployment | 対象version、アクセス範囲、rollbackを人が承認 |
 | 公開 | 一般アクセス | 公開範囲を拡大 | private previewの目視後に別の人間承認 |
 
-現在はModel v1のローカル段階です。Agent Worldのcore/metricsとlocal runnerは実装され、実Ollamaでローカルsmoke済みですが、confirmatory実験可能とは扱いません。private Sites versionの保存・デプロイとpublic化もまだ実施していません。Sitesでは説明用のdisabled画面を表示しても、Agent World実行endpoint、Ollama接続、log取得、実行可能controlを提供しません。
+Model v1はローカルと非公開Sitesで利用できます。Agent Worldのcore/metricsとlocal runnerは実装され、実Ollamaでローカルsmoke済みですが、confirmatory実験可能とは扱いません。Sitesでは説明用のdisabled画面を表示しても、Agent World実行endpoint、Ollama URL・接続、log取得、実行可能controlを提供しません。
 
 ## SSOT、担当、承認
 
@@ -135,7 +135,7 @@ model cache、event log、artifactは自動削除しません。容量削減や�
 - 実URLのアクセス制御がprivateで、未承認者が閲覧できない
 - CSP等のレスポンスヘッダーと静的アセットのcontent type/cache挙動
 - 本番URLのSPA fallbackと、API形式・POST要求がアプリシェルへ誤変換されない
-- Agent WorldがSites bundleと公開画面に存在せず、ブラウザーからlocalhost:11434等へ接続しない
+- SitesにAgent Worldの実行endpoint、実行可能control、Ollama URL・接続がなく、説明用disabled UIからもlocalhost:11434等へ接続しない
 - Agent Worldのtyped actor stateとrole labelによるprompt誘導の有無、cascade/創発の解釈
 - condition-blind review、実在データとの外部validation、別model/promptでの頑健性
 - Ollamaの完全GPU offload、wall-clock、fan/temperature、長時間runの端末安定性
@@ -194,7 +194,7 @@ alert delivery proofは未取得です。監視サービスを追加する場合
 5. deployment status、トップページ、主要操作、アクセス制御、ヘッダーを再確認する。
 6. 原因、影響、修正版、再発防止を記録する。
 
-公開前に一度、以前の保存済みversionへ戻してsmokeする復旧訓練を行います。Sites versionがまだ存在しないため、現時点ではrollback drillは未実施です。
+大きな公開範囲変更の前に、以前の保存済みversionへ戻してsmokeする復旧訓練を行います。復旧訓練の実施日時と対象versionはrelease checklistへ記録します。
 
 ## RTO / RPO
 

@@ -6,7 +6,7 @@
 
 Agent Worldは別のローカル実験境界です。ローカルorchestrator、Ollama loopback API、model cache、実験manifest、actor memory、event log、集計artifactを対象に含めますが、公開SitesへAgent World機能やOllama接続を追加しません。v0.1 core/metricsとlocal Ollama runnerは実装・smoke済みですが、confirmatory実験は未承認です。
 
-公開前のSitesデプロイは保留中で、初回共有はprivate-by-defaultです。配信基盤自体の内部実装と管理者アカウントはこのリポジトリの直接管理外です。
+Sitesはprivate-by-defaultでデプロイします。公開範囲の拡大は別承認とし、配信基盤自体の内部実装と管理者アカウントはこのリポジトリの直接管理外です。
 
 ## 保護対象
 
