@@ -1,6 +1,8 @@
 <!-- repo-preflight:review-record -->
 
-# 公開準備状況
+# 公開準備状況（2026-08-16時点の履歴）
+
+> これは下記HEADに対して作成した過去の検査記録です。現在の運用状態は`README.md`と`OPERATIONS.md`、現在の検証結果は最新のPull RequestとGitHub Actionsを確認してください。
 
 - 検査対象HEAD: `667897dbf44848d4c577af18ca215a89f1823b75`
 - この記録を追加するcommit: 検査対象HEADの後続commit
