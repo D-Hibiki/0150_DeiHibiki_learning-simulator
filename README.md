@@ -4,6 +4,13 @@
 
 > このアプリは、設定した数式と合成した仮想学習者に条件づけた計算実験です。人間から回答を収集した社会調査ではなく、現実の教育効果、因果効果、将来値、母集団代表性を示しません。
 
+## 2つのモデル系統
+
+- **Model v1**: 現在実装済みのブラウザー内Monte Carloシミュレーターです。このREADMEの「できること」と実行commandはModel v1を指します。
+- **Agent World**: 社会構成員を独立したLLM actorとしてローカルで動かし、相互作用由来の集団パターンを対照・ablationで探索する別モデルです。v0.1の決定論的core/metricsは`src/agent-world/`、local runnerは`local/`に分離しています。loopback、失敗処理、ODD準拠判定の実装blockerは解消し、ローカルsmokeまで確認済みですが、これは探索的pilotの準備証拠です。別承認なしにconfirmatory実験へ使用せず、Model v1の結果schemaへ混ぜません。
+
+Agent WorldはローカルorchestratorからloopbackのOllamaだけを利用します。公開SitesではAgent Worldを無効にし、Sitesやブラウザーから利用者端末のOllamaへ接続しません。chain-of-thought、hidden reasoning、Ollama `thinking`は保存・表示せず、監査には最終の構造化行動、観測可能な発話、validation、world state差分を使います。
+
 ## 目的
 
 急激な社会変化に備えて複数の学習手段を残すという仮説を、前提と限界を明示した再現可能な合成シミュレーションとして比較・検討できるようにします。
@@ -27,6 +34,8 @@
 
 アプリのコードは設定や結果を外部へ送信しません。公開後のホスティング基盤では、通常の静的アセット要求に伴うアクセス情報が基盤側で扱われる可能性があるため、公開時にSites側の仕様と設定を別途確認します。
 
+Agent World v1は人名や人口属性personaを使わず、合成した行動関連のtyped stateとローカルartifactだけを扱います。実在個人・未成年者・学校や組織の機微情報は入力しません。Ollama modelのpullは外部通信とローカルcache変更、実験はGPU時間とdisk消費、artifactのGit/Issue/PR/Sites掲載は外部共有として、それぞれ実行前に対象と影響を確認します。
+
 ## クイックスタート
 
 依存関係をロックファイルどおりに導入します。
@@ -37,6 +46,18 @@ npm run dev
 ```
 
 Viteが表示したローカルURLをブラウザーで開きます。
+
+Agent World runnerの実装確認用commandは次です。Ollamaと許可modelが既にローカル導入済みであることを前提とし、model pullは別承認です。
+
+```powershell
+npm run agent:compat
+npm run agent:citizen-smoke
+npm run dev:local
+```
+
+`agent:compat`はOllama OpenAI互換APIとAgents SDKの最小compatibility smoke、`agent:citizen-smoke`は1 actorの実decision、`dev:local`はWeb UIとloopback agent serverの開発起動です。Ollama 0.32.14、`qwen3.5:9b-q4_K_M`でcompatibility pass、citizen smoke 2.25秒、ブラウザーのstart/progress/cancelを確認済みです。これらは実装とpilot準備の証拠であり、confirmatory研究結果ではありません。
+
+既知だった3つの実装blockerは解消済みです。Vite proxyは`--mode agent --host 127.0.0.1`のときだけ有効、decision HTTP失敗はfallbackせずterminal error、UI判定は`metrics.assessEmergence`とODDのcontinuity cascade threshold／paired riskへ統一し、AUCはsecondary表示だけにしました。ただしpilotで選択・調整した閾値や結果をconfirmatoryへ流用してはいけません。confirmatoryは閾値、minimum pairs、model digest、prompt/schema、Seed、除外・停止規則を事前凍結し、pilot runを除外したうえで別の人間承認を必要とします。詳細は[アーキテクチャ](docs/architecture.md)と[運用手順](OPERATIONS.md)を参照してください。
 
 ## 検証
 
@@ -63,6 +84,9 @@ npm run test:sites
 - デスクトップおよびモバイルの目視レビュー
 - 注意書きの明瞭さと社会科学的な解釈の妥当性
 - 公開環境のアクセス制御、レスポンスヘッダー、実URLでのsmoke test
+- Agent Worldのcascadeがpromptやrole labelで誘導されていないこと、社会的解釈の妥当性
+- Agent Worldの完全GPU offload、長時間runの安定性、別model/promptでの頑健性
+- Agent World event logにchain-of-thought、`thinking`、別actorのprivate memoryがないこと
 
 ## ビルドとホスティング
 
@@ -83,6 +107,7 @@ Sitesへのデプロイは保留中です。初回共有はprivateを既定と�
 - [方法論](docs/METHODOLOGY.md)
 - [アーキテクチャ](docs/architecture.md)
 - [脅威モデル](docs/threat-model.md)
+- [Agent World ODD仕様](docs/agent-world-odd.md)
 - [デザインQA](design-qa.md)
 - [セキュリティ方針](SECURITY.md)
 - [貢献手順](CONTRIBUTING.md)
@@ -96,6 +121,7 @@ Sitesへのデプロイは保留中です。初回共有はprivateを既定と�
 
 - モデル: v1.0.0
 - 実装形態: React + TypeScript + Vite、Web Workerによる計算
+- Agent World: v0.1 core/metrics＋local runner。実Ollamaでcompatibility/citizen/browser smoke済み、confirmatoryは未承認、Sitesでは無効
 - 保存: ブラウザー内メモリと利用者が明示的に保存するローカルファイルのみ
 - Sitesデプロイ: 保留中、private-by-default
 - 公開判断: 自動検証に加えて人間による承認が必要

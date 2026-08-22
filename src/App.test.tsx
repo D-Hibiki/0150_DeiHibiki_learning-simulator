@@ -30,4 +30,13 @@ describe("App", () => {
     expect(screen.getByRole("button", { name: /JSON/ })).toBeInTheDocument();
     expect(screen.getByText("試行を重ねたときの累積平均")).toBeInTheDocument();
   });
+
+  it("opens the local-only LLM citizen lab without mixing it with model v1", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(screen.getByRole("button", { name: "Agent World・LLM市民" }));
+    expect(await screen.findByRole("heading", { name: /LLM市民の相互作用から/ })).toBeInTheDocument();
+    expect(screen.getByText(/LLM市民は人間の代替ではありません/)).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /シミュレーション実行/ })).not.toBeInTheDocument();
+  });
 });

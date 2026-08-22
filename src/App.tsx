@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import {
   BookOpen,
   ChartLineUp,
@@ -42,6 +42,11 @@ import {
   type TrialCount,
 } from "./simulation";
 
+const AgentWorldLab = lazy(async () => {
+  const module = await import("./components/AgentWorldLab");
+  return { default: module.AgentWorldLab };
+});
+
 const APP_VERSION = "1.0.0";
 const INFRASTRUCTURES: Infrastructure[] = ["paper", "digital", "hybrid"];
 const LABELS: Record<Infrastructure, string> = {
@@ -60,6 +65,7 @@ const SCENARIOS = [
   { id: "rapidUpdate", label: "急激な情報更新", note: "紙教材鮮度50%", icon: Warning },
 ] as const;
 type ViewId = "comparison" | "report" | "sensitivity";
+type ProductMode = "model-v1" | "agent-world";
 type WorkerMessage =
   | { type: "progress"; completed: number; total: number }
   | { type: "complete"; result: ExperimentResult }
@@ -387,6 +393,7 @@ function SensitivityView({
 }
 
 export function App() {
+  const [productMode, setProductMode] = useState<ProductMode>("model-v1");
   const [config, setConfig] = useState<SimulationConfig>(() => cloneConfig(DEFAULT_CONFIG));
   const [result, setResult] = useState<ExperimentResult>(() => runExperiment(DEFAULT_CONFIG));
   const [view, setView] = useState<ViewId>("comparison");
@@ -477,6 +484,13 @@ export function App() {
           <div><strong>予測ではありません</strong><span>設定した仮定の中での計算結果です。現実の教育効果・因果効果・母集団代表性を示しません。</span></div>
         </div>
       </header>
+
+      <nav className="product-tabs" aria-label="シミュレーションモデル">
+        <button type="button" className={productMode === "model-v1" ? "is-selected" : ""} aria-current={productMode === "model-v1" ? "page" : undefined} onClick={() => setProductMode("model-v1")}>Model v1・合成コホート</button>
+        <button type="button" className={productMode === "agent-world" ? "is-selected" : ""} aria-current={productMode === "agent-world" ? "page" : undefined} onClick={() => setProductMode("agent-world")}>Agent World・LLM市民</button>
+      </nav>
+
+      {productMode === "agent-world" ? <Suspense fallback={<main className="agent-lab"><section className="agent-empty">Agent Worldを準備中…</section></main>}><AgentWorldLab /></Suspense> : <>
 
       <section className="scenario-strip" aria-labelledby="scenario-title">
         <h2 id="scenario-title">シナリオを選択</h2>
@@ -577,6 +591,7 @@ export function App() {
           </div>
         </aside>
       </div>
+      </>}
     </div>
   );
 }

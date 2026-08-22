@@ -5,24 +5,35 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:agent": "tsx local/agent-server.ts",
+    "dev:local": "concurrently --kill-others-on-fail --names WEB,AGENT \"vite --mode agent --host 127.0.0.1\" \"npm:dev:agent\"",
     "build": "vite build && node scripts/prepare-sites-build.mjs",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.local.json",
+    "agent:compat": "tsx local/compat-smoke.ts",
+    "agent:citizen-smoke": "tsx local/citizen-smoke.ts",
     "test:sites": "node --test tests/sites-worker.test.mjs",
     "verify": "npm run typecheck && npm run test && npm run build && npm run test:sites"
   },
   "dependencies": {
+    "@hono/node-server": "^2.1.1",
+    "@openai/agents": "^0.16.0",
     "@phosphor-icons/react": "2.1.10",
     "@vitejs/plugin-react": "5.0.4",
     "d3-dsv": "3.0.1",
+    "graphology": "^0.26.0",
+    "graphology-generators": "^0.11.2",
+    "hono": "^4.13.2",
+    "ollama": "^0.6.3",
     "pure-rand": "7.0.1",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "recharts": "3.1.2",
     "simple-statistics": "7.8.8",
-    "vite": "6.4.3"
+    "vite": "6.4.3",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@testing-library/dom": "10.4.1",
@@ -32,8 +43,14 @@
     "@types/d3-dsv": "3.0.7",
     "@types/react": "19.1.10",
     "@types/react-dom": "19.1.7",
+    "concurrently": "^10.0.5",
     "jsdom": "26.1.0",
+    "tsx": "^4.23.12",
     "typescript": "5.9.2",
     "vitest": "3.2.7"
+  },
+  "allowScripts": {
+    "esbuild@0.25.12": true,
+    "esbuild@0.28.2": true
   }
 }

@@ -224,3 +224,86 @@ d[i,A-B] = x[i,A] - x[i,B]
 9. 研究プロトコル、分析計画、コード、モデル版、データ来歴の監査可能な記録。
 
 これらを完了するまでは、本アプリの結果を政策判断や教育効果の根拠として単独利用しない。
+
+## 11. Agent Worldの別研究計画
+
+### 11.1 Model v1との境界
+
+Agent Worldは、社会構成員そのものをLLM actorとして模倣し、局所相互作用から集団パターンが生じるかを探索する**別モデル・別実験**である。Model v1の式、Seed、`ExperimentResult`、反復分布へAgent Worldの出力を混ぜない。UIやレポートで比較する場合も、モデル名、version、データ生成機構、妥当性の限界を分離表示する。
+
+Model v1の結果は固定数式に条件づけたMonte Carlo結果であり、Agent Worldの結果は特定のLLM、prompt、memory、scheduler、相互作用規則に条件づけたagent-based simulation結果である。どちらも実測社会調査、因果推論、母集団推定、将来予測ではない。
+
+Agent Worldの完全なODD記述は [agent-world-odd.md](agent-world-odd.md) をSSOTとし、本節は評価原則とgateだけを定める。実装とODDが異なる場合は実験を開始せず、ODD、manifest schema、test fixtureを同じ変更で更新する。
+
+### 11.2 採用する既存知見と自前実装
+
+| 分類 | 内容 | 採用・不採用理由 |
+|---|---|---|
+| 既存機能 | Ollamaのlocal API、seed、生成parameter、JSON Schema、token/duration計測 | 推論transportと構造化最終応答に採用。仕様は[Chat API](https://docs.ollama.com/api/chat)と[Modelfile](https://docs.ollama.com/modelfile)に固定する |
+| 既存研究 | [Generative Agents](https://arxiv.org/html/2304.03442)のobservation、memory、component ablation | bounded memoryとablationの基礎に採用。reflection/planningはAgent World v1の必須機能にしない |
+| 既存評価 | [SOTOPIA](https://arxiv.org/html/2310.11667)のprivate goal、partial knowledge、goal/believability/relationship/knowledge/secret/social rule/material benefit | actor品質の副次評価に採用。LLM judge単独は不採用 |
+| 既存標準 | [ODD protocol](https://www.jasss.org/23/2/7.html) | モデル記述、実験再実装、pattern-oriented evaluationに採用 |
+| 自前実装 | world engine、二相tick、観測filter、有限action schema、validation、競合解決、control、event replay、決定論的metrics | LLM基盤が提供せず、実験の内部妥当性に必須 |
+| 不明 | typed actor stateが目的に十分か、モデル間頑健性、必要replicate数、16GB GPUでの実行時間 | pilotと独立した人間データなしには確定しない。Agent World v1は人間代表性を主張しない |
+
+### 11.3 創発の操作的定義
+
+次の全条件を満たす場合だけ、結果を「創発候補」と呼ぶ。
+
+1. 集団パターンを個々のprompt、action rule、競合解決規則へ直接書いていない。
+2. 局所観測とactor間相互作用の反復から発生する。
+3. 同一の初期world、人口、shock、環境Seedを共有するno-interaction対照との差が、複数replicateで一貫する。
+4. 主要指標、除外規則、停止条件をpilot後・本試験前に固定している。
+5. deterministic metricまたはcondition-blindの人間評価で確認し、同一/類似LLM judgeの評点だけに依存しない。
+
+Agent World v1のprimary patternは、[ODD](agent-world-odd.md)で定義する`interaction-induced continuity cascade`である。shock前baseline、onset window、最低継続割合、sustain ticksを全て満たすrun-level indicatorを使い、primary contrastはseed manifestが完全一致するFull対No-interactionのpaired risk differenceとする。閾値に既定値を置かず、pilotをconfirmatoryから除外した上でstudy protocol hashへ固定する。agent、message、tickを独立標本として数えない。
+
+情報到達率・到達時間、参加率、network density/clustering/modularity、行動entropy、学習継続率AUC、最悪群の継続率、媒体切替、復旧時間、access gapはsecondary/exploratory指標候補であり、primary失敗後にemergence claimを救済するために使わない。
+
+[Generative Agents](https://arxiv.org/html/2304.03442)は情報伝播、関係graphのdensity、招待後の参加を記述的に測定した。一方、[SOTOPIA-π](https://aclanthology.org/2024.acl-long.698/)は、社会interaction向けに訓練したagentをLLM evaluatorが過大評価し得ることを報告している。このため、自然な会話やbelievabilityだけを創発の証拠にしない。
+
+### 11.4 対照・ablation
+
+pilotは最低限、次の4条件を同じ初期条件でpaired実行する。
+
+1. Full: interaction on＋bounded memory on＋LLM decision policy。
+2. No-interaction: actorは同じ環境を観測するが、他actorの発話・行動結果を観測しない。
+3. No-memory: interactionは維持するが、bounded memoryを入力へ含めない。
+4. Rule (`rule-baseline`): 同じworld、人口、network、shockで事前定義した非LLM policyを使う。
+
+本試験の主比較はFull対No-interactionとする。No-memoryとRuleはsecondary mechanism controlsであり、primary failureを救済しない。role label removal、prompt paraphrase、network topology/Seed、別model/quantizationは事前登録したrobustness checkとする。条件間でactor出力を共有してはならないが、同じ`replicateId`のinitialization、network、schedule、inference seed manifestは一致させる。
+
+### 11.5 再現性と保存範囲
+
+実験manifestへ最低限、次を固定する。
+
+- experiment ID、hypothesis、primary/secondary metrics、condition、actor数、tick数、replicate数
+- Ollama version、model tag＋digest、quantization、context length、GPU offload状態
+- actor/system prompt、observation template、bounded-memory規則、action JSON Schemaのversion/hash
+- temperature、top-k、top-p、seed、最大出力token、scheduler、競合解決規則
+- 初期人口、network、world、shock、全ての非LLM Seed
+- 完了・失敗・timeout・schema棄却・再試行の規則と件数
+
+immutable event logには各tickの公開/私的観測、検索されたmemory ID、LLMへ渡したversioned input、**最終の構造化応答**、validation結果、適用したstate diffを保存する。chain-of-thought、hidden reasoning、Ollama `thinking`は要求せず、受信した場合も保存・表示・評価へ渡さない。完全再演には保存済み最終応答をreplayし、engine再現性とLLM生成変動を分離する。
+
+### 11.6 ローカル資源と段階
+
+RTX 5060 Ti 16GBでは、modelを1つだけロードしてactorを逐次推論し、Ollama parallelismを1から開始する。現在の候補は[Ollama libraryのQwen 3.5](https://ollama.com/library/qwen3.5/tags)の9B Q4であるが、model license、digest、完全GPU offload、context別のVRAMをローカルsmokeで確認するまで確定しない。
+
+段階的な上限案は次のとおりであり、統計的十分性やwall-clockの保証ではない。
+
+| 段階 | actor × tick × condition × replicate | 目的 | gate |
+|---|---:|---|---|
+| Smoke | 4 × 8 × 2 × 1 | API、schema、event replay、GPU計測 | 失敗なく完走し、100% GPU offloadとログ欠落なしを人が確認 |
+| Pilot | 8 × 24 × 4 × 3 | 分散、効果量、失敗率、prompt誘導を推定 | primary metricと本試験replicate数を凍結する人間承認 |
+| Confirmatory候補 | 12 × 48 × 2 × 10 | Full対No-interaction | pilotからpower/precisionを再計算し、GPU時間・保存量を承認後に実行 |
+
+Ollamaは24GiB未満で既定contextが小さく、agent用途には長いcontextを推奨しているため、[context length公式資料](https://docs.ollama.com/context-length)に従い8K/16K/32K/64Kをsmokeし、`ollama ps`でGPU常駐を確認する。長期memoryはアプリ側retrievalで圧縮するが、context短縮による行動品質低下は人間レビュー対象とする。APIが返すprompt/eval token数とdurationで実測し、根拠のないwall-clock見積りを公開しない。
+
+### 11.7 妥当性限界と停止条件
+
+[PNASの一次研究](https://doi.org/10.1073/pnas.2501660122)は、単純な戦略ゲームでも多くのLLMが人間の行動分布を再現できず、言語、役割、安全調整等で失敗が不規則に変わることを示した。一方、[1,052人をself-reportでgroundingした研究](https://arxiv.org/abs/2411.10109)は、詳細な面接・surveyに基づくagentでは特定のheld-out課題を一定程度予測できると報告している。後者はAgent World v1の短いtyped stateを対象人口の代理にできる証拠ではない。
+
+したがってAgent Worldは、仮説生成、機構比較、stress testに採用し、実在個人の複製、母集団標本、政策予測、価値判断の代替には採用しない。v1 actorは人名や人口属性personaを持たず、紙/電子適性、adaptability、social susceptibility、resource constraint等の合成typed stateだけを持つ。同一model由来actorの相関、学習データ汚染、prompt/role-label誘導、安全調整、hallucination、memory poisoning、少数actorによるnetwork指標の不安定さを残余リスクとして報告する。
+
+schema違反・timeout・GPU fallbackが事前閾値を超えた、条件間でprompt以外の実装差が見つかった、event replayが一致しない、primary metric定義を実行後に変更する必要が生じた場合は本試験を停止し、結果を探索的pilotへ降格する。

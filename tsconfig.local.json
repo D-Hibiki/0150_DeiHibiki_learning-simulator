@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM"],
+    "types": ["node"],
+    "noEmit": true
+  },
+  "include": ["local/**/*.ts", "src/agent-world/**/*.ts", "src/simulation/**/*.ts", "src/types/**/*.ts"]
+}
