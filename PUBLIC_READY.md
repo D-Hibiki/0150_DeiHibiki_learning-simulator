@@ -1,17 +1,17 @@
 # Public repository readiness
 
-この文書は、`D-Hibiki/learning-infrastructure-redundancy-simulator`をGitHubでPublicにする前後の検査記録です。Public化は閲覧範囲を広げますが、[LICENSE](LICENSE)に記載された利用許諾の範囲を変更しません。
+この文書は、`D-Hibiki/0150_DeiHibiki_learning-simulator`をGitHubでPublicにする前後の検査記録です。Public化は閲覧範囲を広げますが、[LICENSE](LICENSE)に記載された利用許諾の範囲を変更しません。
 
 ## 判定
 
-- 状態: 公開準備branchで確認中
+- 状態: repository rename反映branchで確認中
 - 検査日: 2026-08-25（Asia/Tokyo）
-- 検査対象base: `main` / `f4f2d46fe8495fef7099a030563543d7bcd4a7a9`
-- 対象repository: `D-Hibiki/learning-infrastructure-redundancy-simulator`
+- 検査対象base: `main` / `35d22519b1feadef446b50fc94591fd776d8ce9b`
+- 対象repository: `D-Hibiki/0150_DeiHibiki_learning-simulator`
 - 公開範囲: repositoryの全tracked file、全commit history、GitHub Actionsの公開情報、既存のPull Request
 - ライセンス判断: All rights reservedを維持。MITその他のオープンソースライセンスへ変更しない
 
-この文書を追加するcommitは上記baseより後になるため、Public化直前には新しい`main` HEAD、CI、検査結果を再測定します。
+rename後のrepository名を反映するcommitは上記baseより後になるため、Public化直前には新しい`main` HEAD、CI、検査結果を再測定します。
 
 ## ローカルで確認済み
 
@@ -29,7 +29,7 @@
 
 - active GitHub CLI account、remote owner、push先は`D-Hibiki`で一致
 - default branchは`main`
-- 検査対象base `f4f2d46`のCIは成功
+- 検査対象base `35d2251`のCIは成功
 - Actionsのdefault workflow permissionsはread、workflowからのPull Request承認は無効
 - 2026-08-25時点でDependabotのopen Pull Requestが7件あり、Public化と同時に閲覧可能になることをrepository ownerが了承
 
