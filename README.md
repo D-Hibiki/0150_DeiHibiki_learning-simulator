@@ -6,7 +6,7 @@
 
 ## 提出物
 
-- [GitHubリポジトリ](https://github.com/D-Hibiki/learning-infrastructure-redundancy-simulator)
+- [GitHubリポジトリ](https://github.com/D-Hibiki/0150_DeiHibiki_learning-simulator)
 - [実行結果まとめ](RESULTS.md)
 - [プレゼン資料](docs/submission/learning-infrastructure-redundancy-simulator.pptx)
 - [非公開Sites版](https://learning-infra-redundancy-sim.dayuulsr011f.chatgpt.site/) — 実行できるのはModel v1のみ。Agent Worldは説明用disabled UIで、実験はローカル専用です。

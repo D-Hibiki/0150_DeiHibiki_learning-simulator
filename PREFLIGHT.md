@@ -39,7 +39,7 @@
 | `npm audit --audit-level=high` | pass | 0 vulnerabilities |
 | design QA | pass | `docs/design/reference.png` とブラウザー実装を同一比較入力で確認 |
 | security review | pass with limitation | 登録snapshot後のlockfile修正は別途npm auditと全検証で確認 |
-| GitHub CI | pass | [run 31920743342](https://github.com/D-Hibiki/learning-infrastructure-redundancy-simulator/actions/runs/31920743342) |
+| GitHub CI | pass | [run 31920743342](https://github.com/D-Hibiki/0150_DeiHibiki_learning-simulator/actions/runs/31920743342) |
 | Sites production | unknown | 未デプロイ |
 
 ## SSOTと外部状態
@@ -48,7 +48,7 @@
 - 方法論のSSOT: `docs/METHODOLOGY.md`
 - 運用のSSOT: `OPERATIONS.md`
 - ホスティング紐付けのSSOT: `.openai/hosting.json`（project ID未設定）
-- 現在の外部状態: `D-Hibiki/learning-infrastructure-redundancy-simulator` はprivateで作成済み。`origin/main`は`7faec890d2bdd34e64956b1b74ea3b96ac2c0fc1`と一致。PR、Sites project/version/deploymentは未作成
+- この記録作成時の外部状態: 旧名称`D-Hibiki/learning-infrastructure-redundancy-simulator`はprivateで作成済みで、`origin/main`は`7faec890d2bdd34e64956b1b74ea3b96ac2c0fc1`と一致していた。PR、Sites project/version/deploymentは未作成だった。現在のrepository名と公開準備状態は[PUBLIC_READY.md](PUBLIC_READY.md)を正本とする
 
 ## 人間目視
 
