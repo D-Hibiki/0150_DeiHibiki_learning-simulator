@@ -27,7 +27,7 @@
     "graphology-generators": "^0.11.2",
     "hono": "^4.13.2",
     "ollama": "^0.6.3",
-    "pure-rand": "7.0.1",
+    "pure-rand": "8.4.2",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "recharts": "3.1.2",
